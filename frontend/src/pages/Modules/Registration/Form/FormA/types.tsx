@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface RegistrationFormAContextextType {
   form: FormType | undefined;
   setFormContext?: (form: FormType) => void;
@@ -6,7 +8,11 @@ export interface RegistrationFormAContextextType {
   activeTab: string;
   closeFormTab: ({ tabId }: { tabId: string }) => void;
   isLoading: boolean,
-  setIsLoadingContext: ({ isLoading } : { isLoading: boolean }) => void
+  setIsLoadingContext: ({ isLoading } : { isLoading: boolean }) => void,
+  successAlert?: (message: string) => void;
+  warningAlert?: (message: string) => void;
+  errorAlert?: (message: string) => void;
+  warningAlertWithHtmlContent?: (content: ReactNode) => void;
 }
 
 export type RegistrationFormAInputsType = {
@@ -16,12 +22,19 @@ export type RegistrationFormAInputsType = {
   event_id?: string;
 };
 
+export type OptionsType = {
+  label: string;
+  value: string;
+  selected?: string;
+};
+
 export type FieldsType = {
   id: string;
   form_id: string;
   name: string;
   value?: string;
   rules?: string;
+  options?: Array<OptionsType>;
   attributes: Record<string, string>;
 };
 
@@ -107,6 +120,7 @@ export function convertToFormType(data: unknown): FormType {
       name: field.name || "",
       value: field.value || "",
       rules: field.rules || "",
+      options: field.options || [],
       attributes: field.attributes || {},
     })),
   };
